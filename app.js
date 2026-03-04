@@ -90,24 +90,49 @@ function getShapePosition(type, i) {
         x = Math.sin(t) * Math.cos(u) * spread;
         y = Math.sin(t) * Math.sin(u) * spread;
         z = Math.cos(t) * spread;
-    } else if (type === 'buddha') {
-        // Centered meditating figure
-        const isHead = ((i * 23) % 100) < 15; // 15% for head
+    } else if (type === 'torus') {
+        // Donut shape - perfectly centered at origin
+        const majorRadius = 2.5; // Distance from center of tube to center of torus
+        const minorRadius = 1.0; // Radius of the tube
+        x = (majorRadius + minorRadius * Math.cos(u)) * Math.cos(t);
+        y = (majorRadius + minorRadius * Math.cos(u)) * Math.sin(t);
+        z = minorRadius * Math.sin(u);
+    } else if (type === 'spiral') {
+        // 3D spiral galaxy - centered at origin
+        const turns = 3; // Number of spiral turns
+        const radius = 3;
+        const spiralAngle = t * turns * Math.PI;
+        const distFromCenter = radius * (t / (Math.PI * 2));
+        x = Math.cos(spiralAngle) * distFromCenter;
+        y = Math.sin(spiralAngle) * distFromCenter;
+        z = Math.sin(t * 10) * 1.5; // Centered vertically (-1.5 to 1.5)
+    } else if (type === 'cube') {
+        // Wireframe cube - perfectly centered at origin
+        const size = 3;
+        const face = ((i * 7) % 100) < 17 ? 0 : ((i * 7) % 100) < 34 ? 1 : ((i * 7) % 100) < 51 ? 2 : ((i * 7) % 100) < 68 ? 3 : ((i * 7) % 100) < 85 ? 4 : 5;
         
-        if (isHead) {
-            // Head centered at origin
-            const headTheta = t * 5;
-            const headPhi = u;
-            x = Math.sin(headPhi) * Math.cos(headTheta) * 0.6;
-            y = Math.sin(headPhi) * Math.sin(headTheta) * 0.6 + 1.8;
-            z = Math.cos(headPhi) * 0.6;
-        } else {
-            // Body in meditation pose - centered lotus position
-            const bodyR = 1.8;
-            x = Math.cos(t) * bodyR;
-            y = -Math.abs(Math.sin(t * 2)) * 1.2 - 0.5;
-            z = Math.cos(u) * bodyR * 0.6;
+        if (face === 0 || face === 1) { // Front/Back faces
+            x = (Math.sin(t) * 2 - 1) * size / 2;
+            y = (Math.cos(t) * 2 - 1) * size / 2;
+            z = face === 0 ? size / 2 : -size / 2;
+        } else if (face === 2 || face === 3) { // Left/Right faces
+            y = (Math.sin(t) * 2 - 1) * size / 2;
+            z = (Math.cos(t) * 2 - 1) * size / 2;
+            x = face === 2 ? size / 2 : -size / 2;
+        } else { // Top/Bottom faces
+            x = (Math.sin(t) * 2 - 1) * size / 2;
+            z = (Math.cos(t) * 2 - 1) * size / 2;
+            y = face === 4 ? size / 2 : -size / 2;
         }
+    } else if (type === 'cone') {
+        // Cone - perfectly centered at origin (tip up, base down)
+        const height = 4;
+        const baseRadius = 2.5;
+        const coneY = ((i * 11) % 100) / 100 * height - height / 2; // From -2 to +2 on Y axis
+        const currentRadius = baseRadius * (0.5 - coneY / height);
+        x = Math.cos(t) * currentRadius;
+        z = Math.sin(t) * currentRadius;
+        y = coneY;
     } else {
         // Default Sphere - perfectly centered
         const theta = (i / count) * Math.PI * 2;
