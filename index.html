@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive 3D Particles - Hand Control</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        canvas {
+            display: block;
+        }
+        /* Modern UI Panel */
+        
+        #ui-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 100;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        select,
+        input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            cursor: pointer;
+        }
+        
+        #video-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #555;
+            transform: scaleX(-1);
+            /* Mirror view */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="ui-panel">
+        <h2 style="margin-top:0">Particle Controller</h2>
+
+        <div class="control-group">
+            <label>Template</label>
+            <select id="template">
+                <option value="heart">Heart</option>
+                <option value="flower">Flower</option>
+                <option value="saturn">Saturn</option>
+                <option value="buddha">Buddha Statue</option>
+                <option value="fireworks">Fireworks</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>Particle Color</label>
+            <input type="color" id="colorPicker" value="#00ffcc">
+        </div>
+
+        <div style="font-size: 12px; opacity: 0.6;">
+            Close hands to compress<br> Open hands to expand
+        </div>
+    </div>
+
+    <video id="video" autoplay playsinline style="display:none;"></video>
+    <div id="video-container">
+        <canvas id="output_canvas" style="width: 100%;"></canvas>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
